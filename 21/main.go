@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	"matematica"
+
+	"github.com/Bran00/go.expert/matematica"
 )
 
 func main() {
-	s := Soma(10, 20)
-	fmt.Println("Resultado: $v", s)
+	s := matematica.Soma(10, 20)
+	fmt.Println("Resultado: ", s)
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/Bran00/go.expert/matematica"
+	"github.com/google/uuid"
 )
 
 func main() {
@@ -12,4 +13,5 @@ func main() {
 	fmt.Println("Resultado: ", s)
 	fmt.Println((matematica.A))
 	fmt.Println(carro)
+	fmt.Println(uuid.New())
 }

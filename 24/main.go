@@ -35,13 +35,13 @@ func main() {
 		panic(err)
 	}
 	reader := bufio.NewReader(arquivo2)
-	buffer := make([]byte, 2)
+	buffer := make([]byte, 3)
 	for {
 		n, err := reader.Read(buffer)
 		if err != nil {
 			break
 		}
-		fmt.Print(string(buffer[:n]))
+		fmt.Println(string(buffer[:n]))
 	}
 
 }

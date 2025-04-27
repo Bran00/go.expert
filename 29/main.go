@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"net/http"
 )
 
@@ -39,9 +39,21 @@ func BuscaCEPHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	cep, error := BuscaCEP(cepParam)
+	if error != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("Hello, World!"))
+
+	/* result, err := json.Marshal(cep)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	w.Write(result) */
+	json.NewEncoder(w).Encode(cep)
 }
 
 func BuscaCEP(cep string) (*ViaCEP, error) {
@@ -51,7 +63,7 @@ func BuscaCEP(cep string) (*ViaCEP, error) {
 	}
 	defer resp.Body.Close()
 
-	body, error := ioutil.ReadAll(resp.Body)
+	body, error := io.ReadAll(resp.Body)
 	if error != nil {
 		return nil, error
 	}

@@ -1,20 +1,25 @@
 package main
 
 import (
-	"bytes"
 	"io"
 	"net/http"
-	"os"
 )
 
 func main() {
 	c := http.Client{}
-	jsonVar := bytes.NewBuffer([]byte(`{"name":"John"}`))
-	resp, err := c.Post("http://google.com", "application/json", jsonVar)
+	req, err := http.NewRequest("GET", "http://google.com", nil)
+	if err != nil {
+		panic(err)
+	}
+	req.Header.Set("Accept", "application/json")
+	resp, err := c.Do(req)
 	if err != nil {
 		panic(err)
 	}
 	defer resp.Body.Close()
-	io.CopyBuffer(os.Stdout, resp.Body, nil)
-
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		panic(err)
+	}
+	println(string(body))
 }

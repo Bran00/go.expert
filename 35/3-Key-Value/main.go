@@ -13,5 +13,5 @@ func main() {
 
 func bookHotel(ctx context.Context, name string) {
 	token := ctx.Value("token")
-	fmt.Println(token)
+	fmt.Printf("Token: %s, Name: %s", token, name)
 }

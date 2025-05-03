@@ -1,13 +1,11 @@
 package main
 
 import (
-	""
-
 	"github.com/google/uuid"
 )
 
 type Product struct {
-	ID    int
+	ID    string
 	Name  string
 	Price float64
 }

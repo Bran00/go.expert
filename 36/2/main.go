@@ -69,4 +69,18 @@ func main() {
 	for _, product := range products {
 		fmt.Println(product)
 	}  */
+
+	// update e deleting
+	/* var p Product
+	db.First(&p, 1)
+	p.Name = "Alienware X17"
+	db.Save(&p)
+
+	var p2 Product
+	db.First(&p2, 1)
+	fmt.Println(p2.Name)
+
+	db.Delete(&p2) */
+
+	
 }

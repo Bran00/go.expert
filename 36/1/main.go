@@ -29,20 +29,32 @@ func main() {
 	}
 	defer db.Close()
 
-	product := NewProduct("Ideapad", 1899.0)
-	//err = insertProduct(db, product)
+	/* product := NewProduct("Alienware", 7899.0)
+	err = insertProduct(db, product)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("Inserted product: %v\n", product) */
 
-	product.Price = 2599.0
+	/* product.Price = 2599.0
 	//err = updateProduct(db, product)
 	/* if err != nil {
 		panic(err)
 	} */
+	//fmt.Printf("Updated product: %v\n", product) */
 	
-	p, err := selectProduct(db, "1f8ea207-0ece-468d-81ce-5f9427bacf88")
+	/* p, err := selectProduct(db, "1f8ea207-0ece-468d-81ce-5f9427bacf88")
+	if err != nil {
+		panic(err)
+	} */
+
+	products, err := selectProducts(db)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("Product: %v, has price from: %.2f \n", p.Name, p.Price)
+	for _, p := range products {
+		fmt.Printf("Product %v with price %.2f \n", p.Name, p.Price)
+	}
 }
 
 func insertProduct(db *sql.DB, product *Product) error {
@@ -87,4 +99,23 @@ func selectProduct(db *sql.DB, id string) (*Product, error) {
 		return nil, err
 	}
 	return &p, nil
+}
+
+func selectProducts(db *sql.DB) ([]Product, error) {
+	rows, err := db.Query("SELECT id, name, price FROM products")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var products []Product
+	for rows.Next() {
+		var p Product
+		err = rows.Scan(&p.ID, &p.Name, &p.Price)
+		if err != nil {
+			return nil, err
+		}
+		products = append(products, p)
+	}
+	return products, nil
 }

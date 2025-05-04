@@ -10,23 +10,15 @@ import (
 type Category struct {
 	ID	 int `gorm:"primaryKey"`
 	Name string
-	Products []Product
+	Products []Product `gorm:"many2many:products_categories;"`
 }
 
 type Product struct {
 	ID    		 		int `gorm:"primaryKey"`
 	Name  		 		string
 	Price 		 		float64
-	CategoryID 		int
-	Category 	 		Category
-	SerialNumber 	SerialNumber
+	Categories 	 	[]Category `gorm:"many2many:products_categories;"`
 	gorm.Model
-}
-
-type SerialNumber struct{
-	ID 						int `gorm:"primaryKey"`
-	SerialNumber 	string
-	ProductID 		int
 }
 
 func main() {
@@ -35,28 +27,25 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	db.AutoMigrate(&Product{}, &Category{}, &SerialNumber{})
+	db.AutoMigrate(&Product{}, &Category{})
 
-	/* // create category
-	category := Category{Name: "Furniture"}
+	// create category
+	/* category := Category{Name: "Furniture"}
 	db.Create(&category)
 
+	category2 := Category{Name: "Electronics"}
+	db.Create(&category2)
+	
 	// create product
 	product := Product{
-		Name: "Cabinet", 
-		Price: 258.00, 
-		CategoryID: category.ID,
+		Name: "SmartTV", 
+		Price: 2558.00, 
+		Categories: []Category{category, category2},
 	}
 	db.Create(&product) 
-
-	// create serial number
-	db.Create(&SerialNumber{
-		SerialNumber: "1234567890",
-		ProductID: product.ID,
-	}) */
-
+ */
 	var categories []Category
-	err = db.Model(&Category{}).Preload("Products").Preload("Products.SerialNumber").Find(&categories).Error
+	err = db.Model(&Category{}).Preload("Products").Find(&categories).Error
 	if err != nil {
 		panic(err)
 	}
@@ -64,7 +53,7 @@ func main() {
 	for _, category := range categories {
 		fmt.Println("Category:", category.Name)
 		for _, product := range category.Products {
-			println("Product:", product.Name, "Serial Number:", product.SerialNumber.SerialNumber)
+			println("-", product.Name)
 		}
 	}	
 }

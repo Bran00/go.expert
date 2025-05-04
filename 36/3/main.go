@@ -1,8 +1,6 @@
 package main
 
 import (
-	//"fmt"
-
 	"fmt"
 
 	"gorm.io/driver/mysql"
@@ -12,6 +10,7 @@ import (
 type Category struct {
 	ID	 int `gorm:"primaryKey"`
 	Name string
+	Products []Product
 }
 
 type Product struct {
@@ -20,15 +19,9 @@ type Product struct {
 	Price 		 		float64
 	CategoryID 		int
 	Category 	 		Category
-	SerialNumber 	SerialNumber
 	gorm.Model
 }
 
-type SerialNumber struct {
-	ID 						int `gorm:"primaryKey"`
-	Number 				string
-	ProductID 		int
-}
 
 func main() {
 	dsn := "root:root@tcp(localhost:3306)/goexpert?charset=utf8mb4&parseTime=True&loc=Local"
@@ -36,10 +29,10 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	db.AutoMigrate(&Product{}, &Category{}, &SerialNumber{})
+	db.AutoMigrate(&Product{}, &Category{})
 
 	// create category
-	category := Category{Name: "Furniture"}
+	/* category := Category{Name: "Furniture"}
 	db.Create(&category)
 
 	// create product
@@ -48,17 +41,18 @@ func main() {
 		Price: 258.00, 
 		CategoryID: category.ID,
 	}
-	db.Create(&product)
+	db.Create(&product) */
 
-	//create serial number
-	db.Create(&SerialNumber{
-		Number: "123456",
-		ProductID: product.ID,
-	})
-
-	var products []Product
-	db.Preload("Category").Preload("SerialNumber").Find(&products)
-	for _, product := range products {
-		fmt.Println(product.Name, product.Category.Name, product.SerialNumber.Number)
+	var categories []Category
+	err = db.Model(&Category{}).Preload("Products").Find(&categories).Error
+	if err != nil {
+		panic(err)
 	}
+
+	for _, category := range categories {
+		fmt.Println("Category:", category.Name)
+		for _, product := range category.Products {
+			println("Product:", product.Name)
+		}
+	}	
 }

@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	_ "github.com/go-sql-driver/mysql"
-	//"github.com/google/uuid"
+	"github.com/google/uuid"
 )
 
 type Product struct {
@@ -16,7 +16,7 @@ type Product struct {
 
 func NewProduct(name string, price float64) *Product {
 	return &Product{
-		ID:    "1f8ea207-0ece-468d-81ce-5f9427bacf88",
+		ID:    uuid.New().String(),
 		Name:  name,
 		Price: price,
 	}
@@ -31,13 +31,18 @@ func main() {
 
 	product := NewProduct("Ideapad", 1899.0)
 	//err = insertProduct(db, product)
-	
+
 	product.Price = 2599.0
-	err = updateProduct(db, product)
+	//err = updateProduct(db, product)
+	/* if err != nil {
+		panic(err)
+	} */
+	
+	p, err := selectProduct(db, "1f8ea207-0ece-468d-81ce-5f9427bacf88")
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("Product updated successfully")
+	fmt.Printf("Product: %v, has price from: %.2f \n", p.Name, p.Price)
 }
 
 func insertProduct(db *sql.DB, product *Product) error {
@@ -66,4 +71,20 @@ func updateProduct(db *sql.DB, product *Product) error {
 		return err
 	}
 	return nil
+}
+
+func selectProduct(db *sql.DB, id string) (*Product, error) {
+	stmt, err := db.Prepare("select id, name, price from products where id = ?")
+	if err != nil {
+		return nil, err
+	}
+	defer stmt.Close()
+
+	var p Product
+	err = stmt.QueryRow(id).Scan(&p.ID, &p.Name, &p.Price)
+	// err = stmt.QueryRowContext(ctx, id).Scan(&p.ID, &p.Name, &p.Price)
+	if err != nil {
+		return nil, err
+	}
+	return &p, nil
 }

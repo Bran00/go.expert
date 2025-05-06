@@ -1,0 +1,4 @@
+github.com/Bran00/go.expert v0.0.0-20250504200909-08404b514831 h1:3gFZGTb0l3i3VCP4Fvvfc33FZfyv5lpzZacnY6jwaH4=
+github.com/Bran00/go.expert v0.0.0-20250504200909-08404b514831/go.mod h1:G1YaioFmvsxKLsgIJmKC69caWgptBwcbf6jN15re1ds=
+github.com/google/uuid v1.6.0 h1:NIvaJDMOsjHA8n1jAhLSgzrAzy1Hgr+hNrb57e+94F0=
+github.com/google/uuid v1.6.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=

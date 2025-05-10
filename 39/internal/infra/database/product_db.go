@@ -37,6 +37,14 @@ func (p *Product) FindByID(id string) (*entity.Product, error) {
 	return &product, err
 }
 
+func (p *Product) Delete(id string) error {
+	product, err := p.FindByID(id)
+	if err != nil {
+		return err
+	}
+	return p.DB.Delete(product).Error
+}
+
 func (p *Product) Update(product *entity.Product) error {
 	_, err := p.FindByID(product.ID.String())
 	if err != nil {

@@ -1,9 +1,8 @@
 package configs
 
 import (
-		
-	"github.com/spf13/viper"
 	"github.com/go-chi/jwtauth"
+	"github.com/spf13/viper"
 )
 
 var cfg *conf
@@ -17,7 +16,7 @@ type conf struct {
 	DBName        string `mapstructure:"DB_NAME"`
 	WebServerPort string `mapstructure:"WEB_SERVER_PORT"`
 	JWTSecret     string `mapstructure:"JWT_SECRET"`
-	JWTExpiresIN  int 	 `mapstructure:"DB_EXPIRESIN"`
+	JWTExpiresIN  int    `mapstructure:"JWT_EXPIRES_IN"`
 	TokenAuth     *jwtauth.JWTAuth
 }
 

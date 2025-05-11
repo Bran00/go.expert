@@ -13,6 +13,9 @@ import (
 	"github.com/go-chi/jwtauth"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+
+	httpSwagger "github.com/swaggo/http-swagger"
+	_ "github.com/Bran00/go.expert/39/docs"
 )
 
 // @title           Product API
@@ -67,6 +70,8 @@ func main() {
 
 	r.Post("/users", userHandler.Create)
 	r.Post("/users/generate_token", userHandler.GetJWT)
+
+	r.Get("/docs/*", httpSwagger.Handler(httpSwagger.URL("http://localhost:8080/docs/doc.json")))
 
 	http.ListenAndServe(":8080", r)
 }

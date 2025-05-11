@@ -7,6 +7,9 @@ Content-Type: application/json
 }
 
 ###
+GET http://localhost:8080/products HTTP/1.1
+
+###
 
 GET http://localhost:8080/products/590a4f8d-5bab-4872-95d3-ac644eaafd2d  HTTP/1.1
 
@@ -18,3 +21,7 @@ Content-Type: application/json
   "name": "My shoes",
   "price": 105.98
 }
+
+###
+
+DELETE http://localhost:8080/products/590a4f8d-5bab-4872-95d3-ac644eaafd2d  HTTP/1.1

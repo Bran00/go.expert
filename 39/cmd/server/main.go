@@ -39,7 +39,7 @@ func main() {
 	r.Put("/products/{id}", productHandler.UpdateProduct)
 	r.Delete("/products/{id}", productHandler.DeleteProduct)
 
-	r.Post("/users", userHandler.CreateUser)
+	r.Post("/users", userHandler.Create)
 
 	http.ListenAndServe(":8080", r)
 }

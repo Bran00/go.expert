@@ -7,10 +7,13 @@ import (
 	"github.com/Bran00/go.expert/39/internal/dto"
 	"github.com/Bran00/go.expert/39/internal/entity"
 	"github.com/Bran00/go.expert/39/internal/infra/database"
+	"github.com/go-chi/jwtauth"
 )
 
 type UserHandler struct {
-	UserDB database.UserInterface
+	UserDB       database.UserInterface
+	Jwt          *jwtauth.JWTAuth
+	JwtExpiresIn int
 }
 
 func NewUserHandler(userDB database.UserInterface) *UserHandler {
@@ -19,7 +22,7 @@ func NewUserHandler(userDB database.UserInterface) *UserHandler {
 	}
 }
 
-func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
+func (h *UserHandler) Create(w http.ResponseWriter, r *http.Request) {
 	var user dto.CreateUserInput
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {

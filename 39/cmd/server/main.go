@@ -18,17 +18,21 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
 	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
 	if err != nil {
 		panic(err)
 	}
+
 	db.AutoMigrate(&entity.Product{}, &entity.User{})
 	productDB := database.NewProduct(db)
 	productHandler := handlers.NewProductHandler(productDB)
 
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
+	r.Get("/products/{id}", productHandler.GetProduct)
 	r.Post("/products", productHandler.CreateProduct)
+	r.Put("/products/{id}", productHandler.UpdateProduct)
 
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(":8080", r)
 }

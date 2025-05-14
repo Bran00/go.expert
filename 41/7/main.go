@@ -1,32 +1,56 @@
 package main
 
-import "time"
+import (
+	"fmt"
+	"sync/atomic"
+	"time"
+)
+
+type Message struct {
+	id  int64
+	Msg string
+}
 
 func main() {
-	c1 := make(chan int)
-	c2 := make(chan int)
+	c1 := make(chan Message)
+	c2 := make(chan Message)
+	var i int64 = 0
+
+	// RabbitMQ
 
 	go func() {
-		time.Sleep(1 * time.Second)
-		c1 <- 1
+		for {
+			atomic.AddInt64(&i, 1)
+			time.Sleep(1 * time.Second)
+			msg := Message{i + 1, "Hello RabbitMQ"}
+			c1 <- msg
+		}
 	}()
 
+	// Kafka
 	go func() {
-		time.Sleep(2 * time.Second)
-		c2 <- 2
+		for {
+			atomic.AddInt64(&i, 1)
+			time.Sleep(1 * time.Second)
+			msg := Message{i + 1, "Hello Kafka"}
+			c2 <- msg
+		}
 	}()
 
-	select {
-		case msg1 := <-c1:
-			println("Received", msg1)
+	//for i := 0; i < 2; i++ {
+	for {
+		select {
+		case msg := <-c1: //rabbitmq
+			fmt.Printf("Received from RabbitMQ: %v - ID: %d\n", msg.Msg, msg.id)
 
-		case msg2 := <-c2:
-			print("Received", msg2)
-		
+		case msg := <-c2: //kafka
+			fmt.Printf("Received from Kafka: %v - ID: %d\n", msg.Msg, msg.id)
+
 		case <-time.After(3 * time.Second):
 			println("Timeout")
 
-		default: 
-			println("Default")
+			/* default:
+			println("Default") */
+		}
 	}
 }

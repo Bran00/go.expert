@@ -8,4 +8,5 @@ import "github.com/Bran00/go.expert/44/internal/database"
 
 type Resolver struct{
 	CategoryDB *database.Category
+	CourseDB *database.Course
 }

@@ -7,9 +7,9 @@ import (
 )
 
 type Category struct {
-	db *sql.DB
-	ID string
-	Name string
+	db          *sql.DB
+	ID          string
+	Name        string
 	Description string
 }
 
@@ -25,10 +25,10 @@ func (c *Category) Create(name, description string) (Category, error) {
 	if err != nil {
 		return Category{}, err
 	}
-	
+
 	return Category{
-		ID: id,
-		Name: name,
+		ID:          id,
+		Name:        name,
 		Description: description,
 	}, nil
 }
@@ -52,16 +52,16 @@ func (c *Category) FindAll() ([]Category, error) {
 	return categories, nil
 }
 
-func (c *Category) FindByCourseID(couseID string) (Category, error) {
+func (c *Category) Find(couseID string) (Category, error) {
 	var id, name, description string
-	err := c.db.QueryRow("SELECT c.id, c.name, c.description FROM categories c JOIN courses co ON c.id = co.category_id WHERE co.id = ?", couseID).Scan(&id, &name, &description)
+	err := c.db.QueryRow("SELECT c.id, c.name, c.description FROM categories c WHERE c.id = ?", couseID).Scan(&id, &name, &description)
 	if err != nil {
 		return Category{}, err
 	}
 
 	return Category{
-		ID: id,
-		Name: name,
+		ID:          id,
+		Name:        name,
 		Description: description,
 	}, nil
 }

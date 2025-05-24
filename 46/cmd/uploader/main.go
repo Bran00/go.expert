@@ -39,6 +39,17 @@ func main() {
 		panic(err)
 	}
 	defer dir.Close()
+	for {
+		files, err := dir.Readdirnames(1)
+		if err != nil {
+			if err.Error() == "EOF" {
+				break
+			}
+			fmt.Printf("Error reading directory: %v\n", err)
+			continue
+		}
+		uploadFile(files[0].Name())
+	}
 }
 
 func uploadFile(fileName string) {

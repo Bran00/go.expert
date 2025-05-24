@@ -20,8 +20,8 @@ func init() {
 		&aws.Config{
 			Region: aws.String("us-east-1"),
 			Credentials: credentials.NewStaticCredentials(
-				"your-access-key-id",
-				"your-secret",
+			os.Getenv("AWS_ACCESS_KEY_ID"),
+			os.Getenv("AWS_SECRET_ACCESS_KEY"),
 				"",
 			),
 		},
@@ -30,7 +30,7 @@ func init() {
 		panic(err)
 	}
 	s3Client = s3.New(sess)
-	s3Bucket = "your-bucket-name"
+	s3Bucket = os.Getenv("BUCKET_AWS")
 }
 
 func main() {

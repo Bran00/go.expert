@@ -25,6 +25,16 @@ var categoryCmd = &cobra.Command{
 		exists, _ := cmd.Flags().GetBool("exists")
 		fmt.Println("category called with exists: " + fmt.Sprint(exists))
 	},
+	PreRun: func(cmd *cobra.Command, args []string) { 
+		fmt.Println("called before run")
+	},
+	PostRun: func (cmd *cobra.Command, args []string) {
+		fmt.Println("called after run")
+	},
+	RunE: func(cmd *cobra.Command, args []string) error {
+		return fmt.Errorf("Ocorreu um erro")
+	},
+	
 }
 
 var category string

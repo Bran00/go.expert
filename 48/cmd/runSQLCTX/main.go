@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/Bran00/go.expert/48/internal/db"
+	"github.com/google/uuid"
 
 	_ "github.com/go-sql-driver/mysql" // MySQL driver
 )
@@ -87,6 +88,22 @@ func main() {
 	}
 	defer dbConn.Close()
 
-	queries := db.New(dbConn)
+	//queries := db.New(dbConn)
+	courseArgs := CourseParams{
+		ID: uuid.New().String(),
+		Name:        "Go",
+		Description: sql.NullString{String: "Go Course", Valid: true},
+	}
 
+	categoryArgs := CategoryParams{
+		ID:          uuid.New().String(),
+		Name:        "Backend",
+		Description: sql.NullString{String: "Backend description", Valid: true},
+	}
+
+	courseDB := NewCourseDB(dbConn)
+	err = courseDB.CreateCourseAndCategory(ctx, categoryArgs, courseArgs)
+	if err != nil {
+		panic(err)
+	}
 }

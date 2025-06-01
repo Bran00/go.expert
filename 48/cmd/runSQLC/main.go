@@ -5,7 +5,6 @@ import (
 	"database/sql"
 
 	"github.com/Bran00/go.expert/48/internal/db"
-	"github.com/google/uuid"
 
 	_ "github.com/go-sql-driver/mysql" // MySQL driver
 )
@@ -20,7 +19,7 @@ func main() {
 
 	queries := db.New(dbConn)
 
-	err = queries.CreateCategory(ctx, db.CreateCategoryParams{
+	/* err = queries.CreateCategory(ctx, db.CreateCategoryParams{
 		ID:          uuid.New().String(),
 		Name:        "Backend",
 		Description: sql.NullString{String: "Backend description", Valid: true},
@@ -28,7 +27,22 @@ func main() {
 
 	if err != nil {
 		panic(err)
+	} */
+
+	/* categories, err := queries.ListCategories(ctx)
+	if err != nil {
+		panic(err)
 	}
+
+	for _, category := range categories {
+		println(category.ID, category.Name, category.Description.String)
+	} */
+
+	err = queries.UpdateCategory(ctx, db.UpdateCategoryParams{
+		ID:          "02280b4c-332b-4027-8855-8b6cc5c53924",
+		Name:        "Backend Updated",
+		Description: sql.NullString{String: "Backend description updated", Valid: true},
+	})
 
 	categories, err := queries.ListCategories(ctx)
 	if err != nil {
@@ -38,4 +52,6 @@ func main() {
 	for _, category := range categories {
 		println(category.ID, category.Name, category.Description.String)
 	}
+
+	
 }

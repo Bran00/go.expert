@@ -6,7 +6,6 @@ import (
 	"fmt"
 
 	"github.com/Bran00/go.expert/48/internal/db"
-	"github.com/google/uuid"
 
 	_ "github.com/go-sql-driver/mysql" // MySQL driver
 )
@@ -24,15 +23,15 @@ func NewCourseDB(dbConn *sql.DB) *CourseDB {
 }
 
 type CourseParams struct {
-	ID string
-	Name string
+	ID          string
+	Name        string
 	Description sql.NullString
-	Price 	float64
+	Price       float64
 }
 
 type CategoryParams struct {
-	ID string
-	Name string
+	ID          string
+	Name        string
 	Description sql.NullString
 }
 
@@ -69,7 +68,7 @@ func (c *CourseDB) CreateCourseAndCategory(ctx context.Context, argsCategory Cat
 			Name:        argsCourse.Name,
 			Description: argsCourse.Description,
 			CategoryID:  argsCategory.ID,
-			Price: 		 	 argsCourse.Price,
+			Price:       argsCourse.Price,
 		})
 		if err != nil {
 			return err
@@ -91,6 +90,15 @@ func main() {
 	defer dbConn.Close()
 
 	queries := db.New(dbConn)
+
+	courses, err := queries.ListCourses(ctx)
+	if err != nil {
+		panic(err)
+	}
+	for _, course := range courses {
+		fmt.Printf("Category: %s, Course ID: %s, Course Name: %s, Course Description: %s, Course Price: %f \n", course.CategoryName, course.ID, course.Name, course.Description.String, course.Price)
+	}
+
 	/* courseArgs := CourseParams{
 		ID: uuid.New().String(),
 		Name:        "Go",
@@ -110,5 +118,4 @@ func main() {
 		panic(err)
 	} */
 
-	
 }

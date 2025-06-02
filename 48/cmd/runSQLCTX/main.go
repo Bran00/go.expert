@@ -90,8 +90,8 @@ func main() {
 	}
 	defer dbConn.Close()
 
-	//queries := db.New(dbConn)
-	courseArgs := CourseParams{
+	queries := db.New(dbConn)
+	/* courseArgs := CourseParams{
 		ID: uuid.New().String(),
 		Name:        "Go",
 		Description: sql.NullString{String: "Go Course", Valid: true},
@@ -108,5 +108,7 @@ func main() {
 	err = courseDB.CreateCourseAndCategory(ctx, categoryArgs, courseArgs)
 	if err != nil {
 		panic(err)
-	}
+	} */
+
+	
 }

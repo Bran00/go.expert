@@ -11,7 +11,7 @@ import (
 )
 
 func TestAddCourse(t *testing.T) {
-	dbt, err := sql.Open("mysql", "root:root@tcp(localhost:3306)/courses")
+	dbt, err := sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/courses")
 	assert.NoError(t, err)
 
 	dbt.Exec("DROP TABLE if exists `courses`;")
@@ -23,7 +23,7 @@ func TestAddCourse(t *testing.T) {
 	input := InputUseCase{
 		CategoryName:     "Category 1", // ID->1
 		CourseName:       "Course 1",
-		CourseCategoryID: 2,
+		CourseCategoryID: 1,
 	}
 
 	ctx := context.Background()

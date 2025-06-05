@@ -3,7 +3,6 @@ package repository
 import (
 	"context"
 	"database/sql"
-	"fmt"
 
 	"github.com/Bran00/go.expert/49/internal/db"
 	"github.com/Bran00/go.expert/49/internal/entity"
@@ -28,6 +27,6 @@ func NewCourseRepository(dtb *sql.DB) *CourseRepository {
 func (r *CourseRepository) Insert(ctx context.Context, course entity.Course) error {
 	return r.Queries.CreateCourse(ctx, db.CreateCourseParams{
 		Name:       course.Name,
-		CategoryID: fmt.Sprintf("%d", course.CategoryID),
+		CategoryID: int32(course.CategoryID),
 	})
 }

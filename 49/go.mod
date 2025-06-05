@@ -12,6 +12,5 @@ require (
 
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
-	github.com/Bran00/go.expert/48 v0.0.0-20250602230800-26bf7d86f1b3
 	github.com/stretchr/testify v1.10.0
 )

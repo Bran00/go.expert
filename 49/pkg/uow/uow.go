@@ -50,9 +50,13 @@ func (u *Uow) Do(ctx context.Context, fn func(Uow *Uow) error) error {
 	u.Tx = tx
 	err = fn(u)
 	if err != nil {
-		u.Rollback()
+		errRb := u.Rollback()
+		if errRb != nil {
+			return errors.New(fmt.Sprintf("original error: %s, rollback error: %s", err.Error(), errRb.Error()))
+		}
 		return err
 	}
+	return u.CommitOrRollback()
 }
 
 func (u *Uow) Rollback() error {
@@ -63,5 +67,19 @@ func (u *Uow) Rollback() error {
 	if err != nil {
 		return err
 	}
+	u.Tx = nil
+	return nil
+}
+
+func (u *Uow) CommitOrRollback() error {
+	err := u.Tx.Commit()
+	if err != nil {
+		errRb := u.Rollback()
+		if errRb != nil {
+			return errors.New(fmt.Sprintf("commit error: %s, rollback error: %s", err.Error(), errRb.Error()))
+		}
+		return err
+	}
+	return nil
 }
 	

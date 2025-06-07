@@ -3,6 +3,7 @@ package uow
 import (
 	"context"
 	"database/sql"
+	"fmt"
 )
 
 type RepositoryFactory func(tx *sql.Tx) interface{}
@@ -36,3 +37,15 @@ func (u *Uow) Register(name string, fc RepositoryFactory) {
 func (u *Uow) UnRegister(name string) {
 	delete(u.Repositories, name)
 }
+
+func (u *Uow) Do(ctx context.Context, fn func(Uow *UowInterface) error) error {
+	if u.Tx != nil {
+		return fmt.Errorf("transaction alreadu started")
+	}
+	tx, err := u.Db.BeginTx(ctx, nil)
+	if err != nil {
+		return err
+	}
+	u.Tx = tx
+}
+	

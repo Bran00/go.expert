@@ -3,6 +3,7 @@ package uow
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 )
 
@@ -38,14 +39,29 @@ func (u *Uow) UnRegister(name string) {
 	delete(u.Repositories, name)
 }
 
-func (u *Uow) Do(ctx context.Context, fn func(Uow *UowInterface) error) error {
+func (u *Uow) Do(ctx context.Context, fn func(Uow *Uow) error) error {
 	if u.Tx != nil {
-		return fmt.Errorf("transaction alreadu started")
+		return fmt.Errorf("transaction already started")
 	}
 	tx, err := u.Db.BeginTx(ctx, nil)
 	if err != nil {
 		return err
 	}
 	u.Tx = tx
+	err = fn(u)
+	if err != nil {
+		u.Rollback()
+		return err
+	}
+}
+
+func (u *Uow) Rollback() error {
+	if u.Tx == nil {
+		return errors.New("no transaction to rollback")
+	}
+	err := u.Tx.Rollback()
+	if err != nil {
+		return err
+	}
 }
 	

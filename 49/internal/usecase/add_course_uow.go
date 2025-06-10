@@ -53,3 +53,12 @@ func (a *AddCourseUseCaseUow) getCategoryRepository(ctx context.Context) reposit
 
 	return repo.(repository.CategoryRepositoryInterface)
 }
+
+func (a *AddCourseUseCaseUow) getCourseRepository(ctx context.Context) repository.CourseRepositoryInterface {
+	repo, err := a.Uow.GetRepository(ctx, "CourseRepository")
+	if err != nil {
+		panic(err)
+	}
+
+	return repo.(repository.CourseRepositoryInterface)
+}

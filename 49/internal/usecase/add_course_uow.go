@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 
+	"github.com/Bran00/go.expert/49/internal/entity"
 	"github.com/Bran00/go.expert/49/internal/repository"
 	"github.com/Bran00/go.expert/49/pkg/uow"
 )
@@ -18,31 +19,29 @@ func NewAddCourseUseCaseUow(uow uow.UowInterface) *AddCourseUseCaseUow {
 }
 
 func (a *AddCourseUseCaseUow) Execute(ctx context.Context, input InputUseCase) error {
-	return a.Uow.Do(ctx, (func(uow *uow.Uow) error{
-		// tudo que colocarmos aqui, será feito um begin e um commit
+	return a.Uow.Do(ctx, func(uow *uow.Uow) error{
+		category := entity.Category{
+			Name: input.CategoryName,
+		}
+
+		repoCategory := a.getCategoryRepository(ctx)
+		err := repoCategory.Insert(ctx, category)
+		if err != nil {
+			return err
+		}
+
+		course := entity.Course{
+			Name:       input.CourseName,
+			CategoryID: input.CourseCategoryID,
+		}
+
+		repoCourse := a.getCourseRepository(ctx)
+		err = repoCourse.Insert(ctx, course)
+		if err != nil {
+			return err
+		}
 		return nil
-	}))
-
-	/* category := entity.Category{
-		Name: input.CategoryName,
-	}
-
-	err := a.CategoryRepository.Insert(ctx, category)
-	if err != nil {
-		return err
-	}
-
-	course := entity.Course{
-		Name:       input.CourseName,
-		CategoryID: input.CourseCategoryID,
-	}
-
-	err = a.CourseRepository.Insert(ctx, course)
-	if err != nil {
-		return err
-	}
-
-	return nil */
+	})
 }
 
 func (a *AddCourseUseCaseUow) getCategoryRepository(ctx context.Context) repository.CategoryRepositoryInterface {

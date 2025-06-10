@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 
+	"github.com/Bran00/go.expert/49/internal/repository"
 	"github.com/Bran00/go.expert/49/pkg/uow"
 )
 
@@ -42,4 +43,13 @@ func (a *AddCourseUseCaseUow) Execute(ctx context.Context, input InputUseCase) e
 	}
 
 	return nil */
+}
+
+func (a *AddCourseUseCaseUow) getCategoryRepository(ctx context.Context) repository.CategoryRepositoryInterface {
+	repo, err := a.Uow.GetRepository(ctx, "CategoryRepository")
+	if err != nil {
+		panic(err)
+	}
+
+	return repo.(repository.CategoryRepositoryInterface)
 }

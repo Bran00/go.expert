@@ -9,6 +9,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+//lets change the injection with wire
 func main() {
 	db, err := sql.Open("sqlite3", "./test.db")
 	if err != nil {
